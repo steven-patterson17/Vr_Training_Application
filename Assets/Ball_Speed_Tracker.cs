@@ -11,7 +11,7 @@ public class BallSpeedUI : MonoBehaviour
         if (currentBallRB != null)
         {
             float speed = currentBallRB.linearVelocity.magnitude;
-            speedText.text = "Speed: " + speed.ToString("F2") + " m/s";
+            speedText.text = "Speed: " + speed.ToString("F2") + " f/s";
         }
     }
 
