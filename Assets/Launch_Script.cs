@@ -56,9 +56,9 @@ public class PingPongLauncher : MonoBehaviour
 
     public Difficulty difficulty = Difficulty.Beginner;
 
-    private float currentLaunchForce;
-    private float currentSpread;
-    private float currentFireRate;
+    public float currentLaunchForce;
+    public float currentSpread;
+    public float currentFireRate;
 
 
     private void ApplyDifficulty()
