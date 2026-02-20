@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7899323599552611666}
   - component: {fileID: 7709427656666609412}
   - component: {fileID: 1813556555577883899}
+  - component: {fileID: -7775355249356504146}
   m_Layer: 0
   m_Name: Ping Pong Ball(White)
   m_TagString: Untagged
@@ -174,5 +175,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 499520a268653574682841fe65b1c8ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-7775355249356504146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88462737588460199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e33f7037f9e88c4aa927f2a7c6e23f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
