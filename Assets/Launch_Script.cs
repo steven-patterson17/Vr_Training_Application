@@ -5,22 +5,33 @@ public class PingPongLauncher : MonoBehaviour
     [Header("Ball Settings")]
     public GameObject Ping_Pong_Ball;
     public Transform LaunchPoint;
-    public float launchForce = 12f;
+    public Transform tableTarget;   // NEW: aim point on the table
+    public float launchForce = 11f;
 
-    [Header("Auto Aim & Fire")]
-    public Transform player;
+    [Header("Auto Fire")]
     public float fireRate = 5f;
-
     private float timer;
 
     [Header("UI")]
     public MetricsBoardUI metricsBoard;
 
+    [Header("Difficulty")]
+    public Difficulty difficulty = Difficulty.Beginner;
+    public float currentLaunchForce;
+    public float currentSpread;
+    public float currentFireRate;
+
+    void Start()
+    {
+        ApplyDifficulty();
+    }
+
     void Update()
     {
-        if (player != null)
+        // Aim at the table, not the player
+        if (tableTarget != null)
         {
-            LaunchPoint.forward = (player.position - LaunchPoint.position).normalized;
+            LaunchPoint.forward = (tableTarget.position - LaunchPoint.position).normalized;
         }
 
         timer += Time.deltaTime;
@@ -30,65 +41,61 @@ public class PingPongLauncher : MonoBehaviour
             timer = 0f;
         }
     }
+
     public void Shoot()
     {
         GameObject ball = Instantiate(Ping_Pong_Ball, LaunchPoint.position, LaunchPoint.rotation);
         Rigidbody rb = ball.GetComponent<Rigidbody>();
 
-        Vector3 spread = LaunchPoint.forward
-    + new Vector3(
-        Random.Range(-currentSpread, currentSpread),
-        Random.Range(-currentSpread, currentSpread),
-        0f);
+        // Base direction toward table
+        Vector3 dir = (tableTarget.position - LaunchPoint.position).normalized;
 
-        rb.linearVelocity = spread.normalized * currentLaunchForce;
+        // Add controlled spread WITHOUT tilting upward
+        dir += new Vector3(
+            Random.Range(-currentSpread, currentSpread),
+            Random.Range(-currentSpread * 0.5f, currentSpread * 0.5f), // less vertical randomness
+            0f
+        );
 
+        // Slight downward tilt so ball lands on table
+        dir.y -= 0.05f;
 
+        dir.Normalize();
 
+        // Apply velocity directly for consistent speed
+        rb.linearVelocity = dir * currentLaunchForce;
+
+        // Add small random spin
         rb.AddTorque(Random.insideUnitSphere * 0.1f, ForceMode.Impulse);
 
-        // Assign providers to the board
+        // Update metrics
         metricsBoard.speedProvider = ball.GetComponent<BallSpeedProvider>();
         metricsBoard.distanceProvider = ball.GetComponent<BallDistanceProvider>();
 
         Destroy(ball, 5f);
     }
 
-    public Difficulty difficulty = Difficulty.Beginner;
-
-    public float currentLaunchForce;
-    public float currentSpread;
-    public float currentFireRate;
-
-
     private void ApplyDifficulty()
     {
         switch (difficulty)
         {
             case Difficulty.Beginner:
-                currentLaunchForce = 8f;
+                currentLaunchForce = 6f;
                 currentSpread = 0.02f;
                 currentFireRate = 3f;
                 break;
 
             case Difficulty.Intermediate:
-                currentLaunchForce = 12f;
+                currentLaunchForce = 14f;
                 currentSpread = 0.05f;
                 currentFireRate = 2f;
                 break;
 
             case Difficulty.Advanced:
-                currentLaunchForce = 16f;
+                currentLaunchForce = 20f;
                 currentSpread = 0.12f;
                 currentFireRate = 1f;
                 break;
         }
     }
-
-    void Start()
-    {
-        ApplyDifficulty();
-    }
-
-
 }
