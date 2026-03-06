@@ -1,31 +1,32 @@
 using UnityEngine;
 using Firebase.Database;
-using Firebase.Extensions;
 
 public class MetricsUploader : MonoBehaviour
 {
-    private DatabaseReference rootRef;
-
-    void Start()
-    {
-        rootRef = FirebaseInitializer.RootReference;
-    }
-
     public void UploadReturnMetrics(string playerId, GameMetrics metrics)
     {
-        if (!FirebaseInitializer.IsReady || rootRef == null)
+        if (!FirebaseInitializer.IsReady)
         {
-            Debug.LogWarning("Firebase not ready - metrics not uploaded. Ensure FirebaseInitializer runs before uploader.");
+            Debug.LogWarning("Firebase not ready — cannot upload metrics yet.");
             return;
         }
 
+        Debug.Log($"[MetricsUploader] Uploading metrics for player '{playerId}' | " + $"score={metrics.score}, hits={metrics.hits}, misses={metrics.misses}, " + $"speed={metrics.speed}, distance={metrics.distance}, spin={metrics.spin}");
+
         string json = JsonUtility.ToJson(metrics);
-        var newRef = rootRef.Child("gamesessions").Child(playerId).Push();
-        newRef.SetRawJsonValueAsync(json).ContinueWithOnMainThread(task => {
-            if (task.Exception != null)
-                Debug.LogError("Failed to upload metrics: " + task.Exception);
-            else
-                Debug.Log("Metrics uploaded: " + newRef.Key);
-        });
+
+        FirebaseInitializer.RootRef
+            .Child("players")
+            .Child(playerId)
+            .Child("sessions")
+            .Push()
+            .SetRawJsonValueAsync(json)
+            .ContinueWith(task =>
+            {
+                if (task.IsCompleted)
+                    Debug.Log("Metrics uploaded successfully.");
+                else
+                    Debug.LogError("Upload failed: " + task.Exception);
+            });
     }
 }

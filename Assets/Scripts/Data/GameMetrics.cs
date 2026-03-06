@@ -1,6 +1,5 @@
 using System;
-
-[Serializable]
+//[Serializable]
 public class GameMetrics
 {
     public string playerId;

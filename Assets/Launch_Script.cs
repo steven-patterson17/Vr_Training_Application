@@ -34,6 +34,9 @@ public class PingPongLauncher : MonoBehaviour
             LaunchPoint.forward = (tableTarget.position - LaunchPoint.position).normalized;
         }
 
+        Debug.Log("AutoSimulation = " + Physics.simulationMode);
+
+
         timer += Time.deltaTime;
         if (timer >= currentFireRate)
         {
@@ -46,6 +49,11 @@ public class PingPongLauncher : MonoBehaviour
     {
         GameObject ball = Instantiate(Ping_Pong_Ball, LaunchPoint.position, LaunchPoint.rotation);
         Rigidbody rb = ball.GetComponent<Rigidbody>();
+        Debug.Log("RB = " + rb +
+          " | isKinematic = " + rb.isKinematic +
+          " | useGravity = " + rb.useGravity +
+          " | constraints = " + rb.constraints);
+
 
         // Base direction toward table
         Vector3 dir = (tableTarget.position - LaunchPoint.position).normalized;
@@ -63,6 +71,9 @@ public class PingPongLauncher : MonoBehaviour
         dir.Normalize();
 
         // Apply velocity directly for consistent speed
+        Debug.Log("Direction = " + dir);
+        
+
         rb.linearVelocity = dir * currentLaunchForce;
 
         // Add small random spin

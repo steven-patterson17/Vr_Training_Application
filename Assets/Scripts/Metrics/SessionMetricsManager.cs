@@ -32,12 +32,24 @@ public class SessionMetricsManager : MonoBehaviour
         EndSessionAndUpload();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            Debug.Log("Manual upload triggered.");
+            EndSessionAndUpload();
+        }
+    }
+
+
     private void HandleBallReturn(float speed, float spin, float angle, float distance)
     {
         returnCount++;
         sumSpeed += speed;
         sumSpin += spin;
         if (speed > maxSpeed) maxSpeed = speed;
+        Debug.Log("RETURN SPEED = " + speed);
+
     }
 
     /// <summary>
@@ -63,10 +75,10 @@ public class SessionMetricsManager : MonoBehaviour
         float avgSpin = returnCount > 0 ? sumSpin / returnCount : 0f;
 
         // Try to get the ball's distance provider if present
-        var distanceProv = FindObjectOfType<BallDistanceProvider>();
+        var distanceProv = FindFirstObjectByType<BallDistanceProvider>();
         float distance = distanceProv != null ? distanceProv.Distance : 0f;
 
-        int score = Mathf.Max(0, returnCount - missCount); // simplistic score calculation
+        int score = Mathf.Max(0, returnCount*100); // simplistic score calculation
 
         var metrics = new GameMetrics(
             playerId: GetPlayerId(),
@@ -98,7 +110,7 @@ public class SessionMetricsManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-        var uploader = FindObjectOfType<MetricsUploader>();
+        var uploader = FindFirstObjectByType<MetricsUploader>();
         if (uploader == null)
         {
             Debug.LogWarning("No MetricsUploader found in scene; session metrics were not uploaded.");
@@ -108,4 +120,26 @@ public class SessionMetricsManager : MonoBehaviour
         string playerId = metrics.playerId ?? GetPlayerId();
         uploader.UploadReturnMetrics(playerId, metrics);
     }
+
+    public GameMetrics GetCurrentMetrics()
+    {
+        float sessionTime = Time.time - sessionStartTime;
+        float avgSpeed = returnCount > 0 ? sumSpeed / returnCount : 0f;
+        float avgSpin = returnCount > 0 ? sumSpin / returnCount : 0f;
+        float distance = FindObjectOfType<BallDistanceProvider>()?.Distance ?? 0f;
+        int score = Mathf.Max(0, returnCount*100 - missCount*10);
+
+        return new GameMetrics(
+            playerId: GetPlayerId(),
+            score: score,
+            hits: returnCount,
+            misses: missCount,
+            sessionTime: sessionTime,
+            speed: avgSpeed,
+            distance: distance,
+            spin: avgSpin
+        );
+    }
+
+
 }

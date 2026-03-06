@@ -1,10 +1,30 @@
 {
   "project_info": {
     "project_number": "579937226706",
+    "firebase_url": "https://vrsporttrainingapp-default-rtdb.firebaseio.com",
     "project_id": "vrsporttrainingapp",
     "storage_bucket": "vrsporttrainingapp.firebasestorage.app"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579937226706:android:76ad2f9c74146c27e4420b",
+        "android_client_info": {
+          "package_name": "com.Group_213.vrsportstrainingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDn-37VDcJtrrop4WsH3R2cRUWc-eXF8Is"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:579937226706:android:b02a5bd64c8550ebe4420b",
