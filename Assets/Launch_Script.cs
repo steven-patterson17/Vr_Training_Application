@@ -5,11 +5,11 @@ public class PingPongLauncher : MonoBehaviour
     [Header("Ball Settings")]
     public GameObject Ping_Pong_Ball;
     public Transform LaunchPoint;
-    public Transform tableTarget;   // NEW: aim point on the table
-    public float launchForce = 11f;
+    public Transform tableTarget;
+    public float launchForce = 11f;   // base value (not used directly)
 
     [Header("Auto Fire")]
-    public float fireRate = 5f;
+    public float fireRate = 5f;       // base value (not used directly)
     private float timer;
 
     [Header("UI")]
@@ -17,6 +17,12 @@ public class PingPongLauncher : MonoBehaviour
 
     [Header("Difficulty")]
     public Difficulty difficulty = Difficulty.Beginner;
+
+    [Header("Session Control")]
+    public bool isRunning = false;
+
+
+    // These are the REAL values used by the launcher
     public float currentLaunchForce;
     public float currentSpread;
     public float currentFireRate;
@@ -26,16 +32,31 @@ public class PingPongLauncher : MonoBehaviour
         ApplyDifficulty();
     }
 
+    public void StartLaunching()
+    {
+        Debug.Log("Launcher STARTING");
+        ApplyDifficulty();   // ← THIS FIXES 90% OF CASES
+        isRunning = true;
+        timer = 0f;
+    }
+
+
+
+    public void StopLaunching()
+    {
+        isRunning = false;
+    }
+
     void Update()
     {
-        // Aim at the table, not the player
+        if (!isRunning)
+            return;
+
+        // Aim at the table
         if (tableTarget != null)
         {
             LaunchPoint.forward = (tableTarget.position - LaunchPoint.position).normalized;
         }
-
-        Debug.Log("AutoSimulation = " + Physics.simulationMode);
-
 
         timer += Time.deltaTime;
         if (timer >= currentFireRate)
@@ -45,35 +66,28 @@ public class PingPongLauncher : MonoBehaviour
         }
     }
 
+    
+
     public void Shoot()
     {
         GameObject ball = Instantiate(Ping_Pong_Ball, LaunchPoint.position, LaunchPoint.rotation);
         Rigidbody rb = ball.GetComponent<Rigidbody>();
-        Debug.Log("RB = " + rb +
-          " | isKinematic = " + rb.isKinematic +
-          " | useGravity = " + rb.useGravity +
-          " | constraints = " + rb.constraints);
-
 
         // Base direction toward table
         Vector3 dir = (tableTarget.position - LaunchPoint.position).normalized;
 
-        // Add controlled spread WITHOUT tilting upward
+        // Add controlled spread
         dir += new Vector3(
             Random.Range(-currentSpread, currentSpread),
-            Random.Range(-currentSpread * 0.5f, currentSpread * 0.5f), // less vertical randomness
+            Random.Range(-currentSpread * 0.5f, currentSpread * 0.5f),
             0f
         );
 
-        // Slight downward tilt so ball lands on table
+        // Slight downward tilt
         dir.y -= 0.05f;
-
         dir.Normalize();
 
-        // Apply velocity directly for consistent speed
-        Debug.Log("Direction = " + dir);
-        
-
+        // Apply velocity
         rb.linearVelocity = dir * currentLaunchForce;
 
         // Add small random spin
@@ -86,7 +100,8 @@ public class PingPongLauncher : MonoBehaviour
         Destroy(ball, 5f);
     }
 
-    private void ApplyDifficulty()
+    // Called by DifficultyManager
+    public void ApplyDifficulty()
     {
         switch (difficulty)
         {
@@ -108,5 +123,16 @@ public class PingPongLauncher : MonoBehaviour
                 currentFireRate = 1f;
                 break;
         }
+    }
+
+    // Called by sliders
+    public void SetLaunchForce(float value)
+    {
+        currentLaunchForce = value;
+    }
+
+    public void SetFireRate(float value)
+    {
+        currentFireRate = value;
     }
 }

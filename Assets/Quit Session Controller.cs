@@ -16,8 +16,6 @@ public class QuitSessionController : MonoBehaviour
     public TextMeshProUGUI sessionTimeText;
     public TextMeshProUGUI accuracyText;
 
-
-
     public void QuitSession()
     {
         // 1. Stop launcher
@@ -31,6 +29,18 @@ public class QuitSessionController : MonoBehaviour
         // 3. Show post-session UI
         ShowPostSessionData();
     }
+
+    public void ExitGame()
+    {
+        // Quit the application
+        Application.Quit();
+
+        // Extra safety for the editor
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
+
 
     private void ShowPostSessionData()
     {

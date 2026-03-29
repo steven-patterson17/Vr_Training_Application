@@ -18,6 +18,7 @@ public class MetricsBoardUI : MonoBehaviour
     public TextMeshProUGUI returnAngleText;
     public TextMeshProUGUI returnSpeedText;
     public TextMeshProUGUI returnSpinText;
+    public TextMeshProUGUI swingTypeText;
 
 
 
@@ -39,6 +40,11 @@ public class MetricsBoardUI : MonoBehaviour
         returnAngleText.text = "Return Angle:" + $"{angle:F1}°";
         returnSpeedText.text = "Return Speed:" + $"{speed:F1} m/s";
         returnSpinText.text = "Return Spin:" + $"{spin:F1} rad/s";
+    }
+
+    public void SetSwingType(string swingtype)
+    {
+        swingTypeText.text = "Swing : " + swingtype;
     }
 
 

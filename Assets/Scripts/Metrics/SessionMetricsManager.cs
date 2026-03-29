@@ -11,6 +11,7 @@ public class SessionMetricsManager : MonoBehaviour
     private float sessionStartTime;
     private int returnCount;
     private int missCount;
+    private int hitCount;
     private float sumSpeed;
     private float sumSpin;
     private float maxSpeed;
@@ -52,13 +53,74 @@ public class SessionMetricsManager : MonoBehaviour
 
     }
 
+    private int forehandCount;
+    private int backhandCount;
+    private int smashCount;
+    private int sliceCount;
+
+    public void RegisterSwingType(string swingType)
+    {
+        switch (swingType)
+        {
+            case "Forehand":
+                forehandCount++;
+                break;
+            case "Backhand":
+                backhandCount++;
+                break;
+            case "Smash":
+                smashCount++;
+                break;
+            case "Slice":
+                sliceCount++;
+                break;
+        }
+    }
+
+
+    public static GameMode CurrentGameMode = GameMode.None;
+
+    public void SetForehandMode() => CurrentGameMode = GameMode.ForehandOnly;
+    public void SetBackhandMode() => CurrentGameMode = GameMode.BackhandOnly;
+    public void SetSmashMode() => CurrentGameMode = GameMode.SmashOnly;
+    public void SetSliceMode() => CurrentGameMode = GameMode.SliceOnly;
+
+    public bool IsCorrectSwing(string swing)
+    {
+        switch (CurrentGameMode)
+        {
+            case GameMode.ForehandOnly:
+                return swing == "Forehand";
+
+            case GameMode.BackhandOnly:
+                return swing == "Backhand";
+
+            case GameMode.SmashOnly:
+                return swing == "Smash";
+
+            case GameMode.SliceOnly:
+                return swing == "Slice";
+
+            case GameMode.None:
+            default:
+                return true; // free play mode
+        }
+    }
+
+
     /// <summary>
     /// Call this to mark a miss from your game logic (out of bounds, hit floor, etc.).
     /// </summary>
+    public void RegisterHit()
+    {
+        hitCount++;
+    }
+
     public void RegisterMiss()
     {
         missCount++;
     }
+
 
     /// <summary>
     /// Builds a GameMetrics summary and attempts to upload it to Firebase.
@@ -78,7 +140,7 @@ public class SessionMetricsManager : MonoBehaviour
         var distanceProv = FindFirstObjectByType<BallDistanceProvider>();
         float distance = distanceProv != null ? distanceProv.Distance : 0f;
 
-        int score = Mathf.Max(0, returnCount*100); // simplistic score calculation
+        int score = Mathf.Max(0, returnCount * 100 - missCount * 10);
 
         var metrics = new GameMetrics(
             playerId: GetPlayerId(),
@@ -96,10 +158,12 @@ public class SessionMetricsManager : MonoBehaviour
 
     private string GetPlayerId()
     {
-        if (FirebaseInitializer.Auth != null && FirebaseInitializer.Auth.CurrentUser != null)
-            return FirebaseInitializer.Auth.CurrentUser.UserId;
+        if (AuthenticationManager.user != null)
+            return AuthenticationManager.user.UserId;
+
         return "unknown";
     }
+
 
     private IEnumerator WaitForFirebaseAndUpload(GameMetrics metrics, float timeoutSeconds)
     {
@@ -121,6 +185,15 @@ public class SessionMetricsManager : MonoBehaviour
         uploader.UploadReturnMetrics(playerId, metrics);
     }
 
+    public static bool IsLeftHanded = false;
+
+    public void SetLeftHanded(bool value)
+    {
+        SessionMetricsManager.IsLeftHanded = value;
+    }
+
+
+
     public GameMetrics GetCurrentMetrics()
     {
         float sessionTime = Time.time - sessionStartTime;
@@ -140,6 +213,4 @@ public class SessionMetricsManager : MonoBehaviour
             spin: avgSpin
         );
     }
-
-
 }
