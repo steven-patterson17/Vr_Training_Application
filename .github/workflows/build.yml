@@ -43,5 +43,5 @@ jobs:
         shell: powershell
         run: |
           ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"Caleb-Kendig_test" /o:"caleb-kendig" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-          dotnet build
+          echo "Skipping build step for Unity project"
           ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
