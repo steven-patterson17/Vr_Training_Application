@@ -9,24 +9,45 @@ using System.Collections;
 public class AuthenticationManager : MonoBehaviour
 {
     /// <summary>
+    /// Singleton instance for global access.
+    /// </summary>
+    public static AuthenticationManager Instance { get; private set; }
+
+    /// <summary>
     /// Backing field for Firebase authentication instance.
     /// </summary>
-    private static FirebaseAuth _auth;
+    private FirebaseAuth _auth;
 
     /// <summary>
     /// Public read-only access to FirebaseAuth.
     /// </summary>
-    public static FirebaseAuth Auth => _auth;
+    public FirebaseAuth Auth => _auth;
 
     /// <summary>
     /// Backing field for the currently authenticated Firebase user.
     /// </summary>
-    private static FirebaseUser _user;
+    private FirebaseUser _user;
 
     /// <summary>
     /// Public read-only access to the authenticated user.
     /// </summary>
-    public static FirebaseUser User => _user;
+    public FirebaseUser User => _user;
+
+    /// <summary>
+    /// Ensure only one instance exists.
+    /// </summary>
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Optional: persist across scenes
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     /// <summary>
     /// Unity coroutine that initializes Firebase authentication.
@@ -34,13 +55,13 @@ public class AuthenticationManager : MonoBehaviour
     /// </summary>
     IEnumerator Start()
     {
-        // Allow XR and scene objects to initialize first
+        // Allow scene to initialize first
         yield return null;
 
         // Initialize Firebase Auth
         _auth = FirebaseAuth.DefaultInstance;
 
-        // Already signed in?
+        // Check if already signed in
         _user = _auth.CurrentUser;
         if (_user != null)
         {
@@ -50,10 +71,9 @@ public class AuthenticationManager : MonoBehaviour
         // Perform anonymous sign-in
         var task = _auth.SignInAnonymouslyAsync();
 
-        // Wait for Firebase to finish
+        // Wait for Firebase task to complete
         yield return new WaitUntil(() => task.IsCompleted);
 
-        // Assign user if successful
         if (task.Exception == null)
         {
             _user = task.Result.User;
