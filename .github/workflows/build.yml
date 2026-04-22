@@ -34,22 +34,24 @@ jobs:
         run: dotnet tool install --global dotnet-sonarscanner
 
       - name: Add .NET tools to PATH
-        run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
         shell: powershell
+        run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
       - name: SonarCloud Begin
+        shell: powershell
         run: |
           dotnet-sonarscanner begin `
             /k:"steven-patterson17_Vr_Training_Application" `
             /o:"steven-patterson17" `
             /d:sonar.host.url="https://sonarcloud.io" `
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
-            /d:sonar.exclusions="**/Library/**,**/Temp/**,**/Logs/**,**/obj/**,**/bin/**"
+            /d:sonar.exclusions="**/Library/**,**/Temp/**,**/Logs/**,**/obj/**,**/bin/**,**/Packages/**,**/*.Editor.csproj"
 
-      - name: Build
-        run: dotnet build vr_train.sln
+      - name: Build (Unity scripts only)
+        run: dotnet build Assembly-CSharp.csproj
 
       - name: SonarCloud End
+        shell: powershell
         run: |
           dotnet-sonarscanner end `
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
