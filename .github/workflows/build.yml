@@ -5,30 +5,45 @@ on:
     branches:
       - main
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: Build and analyze
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 7.0.x
 
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       - name: Install SonarScanner
         run: dotnet tool install --global dotnet-sonarscanner
 
+      - name: Add .NET tools to PATH
+        run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+        shell: powershell
+
       - name: SonarCloud Begin
         run: |
-          dotnet-sonarscanner begin \
-            /k:"YOUR_PROJECT_KEY" \
-            /o:"YOUR_ORG_KEY" \
-            /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
+          dotnet-sonarscanner begin `
+            /k:"steven-patterson17_Vr_Training_Application" `
+            /o:"steven-patterson17" `
+            /d:sonar.host.url="https://sonarcloud.io" `
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
             /d:sonar.exclusions="**/Library/**,**/Temp/**,**/Logs/**,**/obj/**,**/bin/**"
 
       - name: Build
@@ -36,5 +51,5 @@ jobs:
 
       - name: SonarCloud End
         run: |
-          dotnet-sonarscanner end \
+          dotnet-sonarscanner end `
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
