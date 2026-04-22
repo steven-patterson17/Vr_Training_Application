@@ -1,8 +1,11 @@
-public enum GameMode
+namespace VRTraining
 {
-    None,
-    ForehandOnly,
-    BackhandOnly,
-    SmashOnly,
-    SliceOnly
+    public enum GameMode
+    {
+        None,
+        ForehandOnly,
+        BackhandOnly,
+        SmashOnly,
+        SliceOnly
+    }
 }
