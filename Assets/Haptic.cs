@@ -2,6 +2,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR;
 
+/// <summary>
+/// Controls the feedback given to the controllers
+/// when user hits the ball
+/// </summary>
 public class Haptic : MonoBehaviour
 {
 // public XRNode controllerNode = XRNode.RightHand; // set LeftHand or RightHand in Inspector

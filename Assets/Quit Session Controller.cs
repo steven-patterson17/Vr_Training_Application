@@ -1,6 +1,10 @@
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Controls the post-session metrics and
+/// exiting the session
+/// </summary>
 public class QuitSessionController : MonoBehaviour
 {
     public PingPongLauncher launcher;

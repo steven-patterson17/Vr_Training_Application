@@ -4,6 +4,7 @@ using TMPro;
 public class MetricsBoardUI : MonoBehaviour
 {
     public static MetricsBoardUI Instance { get; private set; }
+
     void Awake()
     {
         Instance = this;
@@ -14,38 +15,39 @@ public class MetricsBoardUI : MonoBehaviour
 
     public TextMeshProUGUI speedText;
     public TextMeshProUGUI distanceText;
-    public TextMeshProUGUI difficultyText;
     public TextMeshProUGUI returnAngleText;
     public TextMeshProUGUI returnSpeedText;
     public TextMeshProUGUI returnSpinText;
     public TextMeshProUGUI swingTypeText;
 
-
-
     void Update()
     {
-        if (speedProvider != null)
+        if (speedProvider != null && speedText != null)
+        {
             speedText.text = "Speed: " + speedProvider.Speed.ToString("F2") + " m/s";
+        }
 
-        if (distanceProvider != null)
+        if (distanceProvider != null && distanceText != null)
+        {
             distanceText.text = "Distance: " + distanceProvider.Distance.ToString("F2") + " m";
-    }
-    public void SetDifficulty(Difficulty difficulty)
-    {
-        difficultyText.text = "Difficulty: " + difficulty.ToString();
+        }
     }
 
     public void SetReturnMetrics(float angle, float speed, float spin)
     {
-        returnAngleText.text = "Return Angle:" + $"{angle:F1}°";
-        returnSpeedText.text = "Return Speed:" + $"{speed:F1} m/s";
-        returnSpinText.text = "Return Spin:" + $"{spin:F1} rad/s";
+        if (returnAngleText != null)
+            returnAngleText.text = "Return Angle: " + $"{angle:F2}°";
+
+        if (returnSpeedText != null)
+            returnSpeedText.text = "Return Speed: " + $"{speed:F2} m/s";
+
+        if (returnSpinText != null)
+            returnSpinText.text = "Return Spin: " + $"{spin:F2} rad/s";
     }
 
     public void SetSwingType(string swingtype)
     {
-        swingTypeText.text = "Swing : " + swingtype;
+        if (swingTypeText != null)
+            swingTypeText.text = "Swing : " + swingtype;
     }
-
-
 }

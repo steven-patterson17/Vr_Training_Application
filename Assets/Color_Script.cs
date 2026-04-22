@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Provides colors to objects in the unity scene
+/// </summary>
 public class CubeColorChanger : MonoBehaviour
 {
     // Public field to set color from the Inspector

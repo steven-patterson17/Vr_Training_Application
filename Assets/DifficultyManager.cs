@@ -1,35 +1,71 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Sets the difficulty to the user's chosen choice
+/// and syncs the sliders to the values of the 
+/// difficulty selected
+/// </summary>
 public class DifficultyManager : MonoBehaviour
 {
+    /// <summary>
+    /// Reference to the PingPongLauncher that controls ball behavior.
+    /// </summary>
     public PingPongLauncher launcher;
+
+    /// <summary>
+    /// Reference to the metrics board UI for displaying session data.
+    /// </summary>
     public MetricsBoardUI metricsBoard;
 
-    // Difficulty buttons
+    /// <summary>
+    /// UI button for selecting beginner difficulty.
+    /// </summary>
     public GameObject beginnerButton;
+
+    /// <summary>
+    /// UI button for selecting intermediate difficulty.
+    /// </summary>
     public GameObject intermediateButton;
+
+    /// <summary>
+    /// UI button for selecting advanced difficulty.
+    /// </summary>
     public GameObject advancedButton;
 
-    // Sliders to sync when difficulty changes
+    /// <summary>
+    /// UI button for selecting random difficulty
+    /// </summary>
+    public GameObject randomButton;
+
+
+    /// <summary>
+    /// Slider used to adjust and display launch force.
+    /// </summary>
     public Slider launchForceSlider;
+
+    /// <summary>
+    /// Slider used to adjust and display fire rate.
+    /// </summary>
     public Slider fireRateSlider;
 
+    /// <summary>
+    /// Sets the game difficulty to Beginner, applies launcher settings,
+    /// updates UI highlighting, and synchronizes sliders.
+    /// </summary>
     public void SetBeginner()
     {
-        Debug.Log("SetBeginner() CALLED");
-
         launcher.difficulty = Difficulty.Beginner;
         launcher.SendMessage("ApplyDifficulty");
         HighlightButton(Difficulty.Beginner);
 
-        Debug.Log("About to call SyncSlidersToLauncher()");
-
         SyncSlidersToLauncher();
     }
 
-
-
+    /// <summary>
+    /// Sets the game difficulty to Intermediate, applies launcher settings,
+    /// updates UI highlighting, and synchronizes sliders.
+    /// </summary>
     public void SetIntermediate()
     {
         launcher.difficulty = Difficulty.Intermediate;
@@ -39,6 +75,10 @@ public class DifficultyManager : MonoBehaviour
         SyncSlidersToLauncher();
     }
 
+    /// <summary>
+    /// Sets the game difficulty to Advanced, applies launcher settings,
+    /// updates UI highlighting, and synchronizes sliders.
+    /// </summary>
     public void SetAdvanced()
     {
         launcher.difficulty = Difficulty.Advanced;
@@ -48,11 +88,20 @@ public class DifficultyManager : MonoBehaviour
         SyncSlidersToLauncher();
     }
 
-    // Sync UI sliders to the values the launcher applied
+    public void SetRandom()
+    {
+        launcher.difficulty = Difficulty.Random;
+        launcher.SendMessage("ApplyDifficulty");
+        HighlightButton(Difficulty.Random);
+
+        SyncSlidersToLauncher();
+    }
+
+    /// <summary>
+    /// Synchronizes UI sliders with the current values applied to the launcher.
+    /// </summary>
     private void SyncSlidersToLauncher()
     {
-        Debug.Log("Syncing sliders: " + launcher.currentLaunchForce + " / " + launcher.currentFireRate);
-
         if (launchForceSlider != null)
             launchForceSlider.value = launcher.currentLaunchForce;
 
@@ -60,13 +109,16 @@ public class DifficultyManager : MonoBehaviour
             fireRateSlider.value = launcher.currentFireRate;
     }
 
-
-    // Button highlighting
+    /// <summary>
+    /// Highlights the selected difficulty button and resets others to default color.
+    /// </summary>
+    /// <param name="difficulty">The selected difficulty level.</param>
     private void HighlightButton(Difficulty difficulty)
     {
         SetButtonColor(beginnerButton, Color.white);
         SetButtonColor(intermediateButton, Color.white);
         SetButtonColor(advancedButton, Color.white);
+        SetButtonColor(randomButton, Color.white);
 
         switch (difficulty)
         {
@@ -81,9 +133,18 @@ public class DifficultyManager : MonoBehaviour
             case Difficulty.Advanced:
                 SetButtonColor(advancedButton, Color.red);
                 break;
+
+            case Difficulty.Random:
+                SetButtonColor(randomButton, Color.blue);
+                break;
         }
     }
 
+    /// <summary>
+    /// Sets the visual color of a UI button.
+    /// </summary>
+    /// <param name="button">The button GameObject to modify.</param>
+    /// <param name="color">The color to apply to the button.</param>
     private void SetButtonColor(GameObject button, Color color)
     {
         var image = button.GetComponent<Image>();

@@ -20,6 +20,8 @@ GameObject:
   - component: {fileID: -5042533571945844738}
   - component: {fileID: 5183653935361355615}
   - component: {fileID: -497459896732949742}
+  - component: {fileID: 4547028135171775181}
+  - component: {fileID: 1124954113788176259}
   m_Layer: 0
   m_Name: Ping Pong Ball(White)
   m_TagString: PingPongBall
@@ -191,7 +193,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &-5042533571945844738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,7 +215,7 @@ AudioSource:
   m_GameObject: {fileID: 88462737588460199}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 4612508627809089935, guid: 32107d8c85ff0a640a208fb6d83ce055, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -315,3 +317,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bounceSound: {fileID: 8300000, guid: d39d260198c64434792dd156808d69f3, type: 3}
   hitSound: {fileID: 8300000, guid: 02183b87e54a75a42aaac7806430e8d1, type: 3}
+--- !u!114 &4547028135171775181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88462737588460199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b251b75da859ee04db8b8b3bcc9d7ee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1124954113788176259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88462737588460199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f046cb08083ee874bb46c693dd6e8c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

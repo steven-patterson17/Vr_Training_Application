@@ -1,22 +1,26 @@
 using UnityEngine;
-using TMPro;
 
-public class BallSpeedUI : MonoBehaviour
+public class Ball_Speed_Tracker : MonoBehaviour
 {
-    public TextMeshProUGUI speedText;
-    private Rigidbody currentBallRB;
+    private Rigidbody rb;
 
-    void Update()
+    public float Speed { get; private set; }
+
+    void Awake()
     {
-        if (currentBallRB != null)
+        rb = GetComponent<Rigidbody>();
+
+        if (rb == null)
         {
-            float speed = currentBallRB.linearVelocity.magnitude;
-            speedText.text = "Speed: " + speed.ToString("F2") + " f/s";
+            Debug.LogError($"{gameObject.name} has no Rigidbody!");
         }
     }
 
-    public void SetBall(Rigidbody rb)
+    void Update()
     {
-        currentBallRB = rb;
+        if (rb != null)
+        {
+            Speed = rb.linearVelocity.magnitude;
+        }
     }
 }

@@ -1,6 +1,10 @@
 using UnityEngine;
 using Firebase.Database;
 
+/// <summary>
+/// Handles uploading player performance metrics to the Firebase Realtime Database.
+/// Ensures Firebase is initialized before attempting to send data.
+/// </summary>
 public class MetricsUploader : MonoBehaviour
 {
     public void UploadReturnMetrics(string playerId, GameMetrics metrics)
@@ -10,9 +14,6 @@ public class MetricsUploader : MonoBehaviour
             Debug.LogWarning("Firebase not ready — cannot upload metrics yet.");
             return;
         }
-
-        Debug.Log($"[MetricsUploader] Uploading metrics for player '{playerId}' | " + $"score={metrics.score}, hits={metrics.hits}, misses={metrics.misses}, " + $"speed={metrics.speed}, distance={metrics.distance}, spin={metrics.spin}");
-
         string json = JsonUtility.ToJson(metrics);
 
         FirebaseInitializer.RootRef

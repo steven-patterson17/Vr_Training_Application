@@ -1,29 +1,55 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:installLocation="auto" xmlns:horizonos="http://schemas.horizonos/sdk">
-  <application android:label="@string/app_name" android:icon="@mipmap/app_icon" android:allowBackup="false">
-    <activity android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" android:configChanges="locale|fontScale|keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode" android:launchMode="singleTask" android:name="com.Group_213.vrsportstrainingappunity3d.player.UnityPlayerGameActivity" android:excludeFromRecents="true" android:exported="true">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-        <category android:name="com.Group_213.vrsportstrainingappoculus.intent.category.VR" />
-        <category android:name="com.oculus.intent.category.VR" />
-      </intent-filter>
-      <meta-data android:name="com.Group_213.vrsportstrainingappoculus.vr.focusaware" android:value="true" />
-      <meta-data android:name="com.oculus.vr.focusaware" android:value="true" />
-    </activity>
-    <meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="false" />
-    <meta-data android:name="com.Group_213.vrsportstrainingappoculus.ossplash.background" android:value="black" />
-    <meta-data android:name="com.Group_213.vrsportstrainingappoculus.telemetry.project_guid" android:value="c277f0b7-a8cc-4055-9d91-784fcf090a1c" />
-    <meta-data android:name="com.Group_213.vrsportstrainingappoculus.supportedDevices" android:value="quest|quest2|questpro|quest3|quest3s" tools:replace="android:value" />
-    <meta-data android:name="com.oculus.handtracking.frequency" android:value="LOW" />
-    <meta-data android:name="com.oculus.ossplash.background" android:value="black" />
-    <meta-data android:name="com.oculus.telemetry.project_guid" android:value="c277f0b7-a8cc-4055-9d91-784fcf090a1c" />
-    <meta-data android:name="com.oculus.supportedDevices" android:value="quest|quest2|questpro|quest3|quest3s" tools:replace="android:value" />
-  </application>
-  <uses-feature android:name="android.hardware.vr.headtracking" android:version="1" android:required="true" />
-  <horizonos:uses-horizonos-sdk horizonos:minSdkVersion="60" horizonos:targetSdkVersion="85" />
-  <uses-feature android:name="oculus.software.handtracking" android:required="false" />
-  <uses-permission android:name="com.oculus.permission.HAND_TRACKING" />
-  <uses-permission android:name="com.oculus.permission.USE_ANCHOR_API" />
-  <uses-permission android:name="com.oculus.permission.USE_SCENE" />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.Group_213.vrsportstrainingappunity3d"
+          android:installLocation="auto">
+
+	<!-- Required for Firebase -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+	<!-- Required for Quest -->
+	<uses-feature
+        android:name="android.hardware.vr.headtracking"
+        android:required="true"
+        android:version="1" />
+
+	<application
+        android:label="@string/app_name"
+        android:icon="@mipmap/app_icon"
+        android:allowBackup="false"
+        tools:replace="android:allowBackup">
+
+		<!-- Quest device targeting -->
+		<meta-data
+            android:name="com.oculus.supportedDevices"
+            android:value="quest2|questpro|quest3|quest3s" />
+
+		<activity
+            android:name="com.unity3d.player.UnityPlayerGameActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:exported="true"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:resizeableActivity="false"
+            android:configChanges="density|keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|uiMode">
+
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+				<category android:name="com.oculus.intent.category.VR" />
+			</intent-filter>
+
+			<meta-data
+                android:name="com.oculus.vr.focusaware"
+                android:value="true" />
+		</activity>
+
+		<!-- Firebase messaging icon -->
+		<meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/app_icon" />
+
+	</application>
+
 </manifest>

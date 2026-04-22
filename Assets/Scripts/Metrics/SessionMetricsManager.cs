@@ -34,12 +34,7 @@ public class SessionMetricsManager : MonoBehaviour
     }
 
     void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            Debug.Log("Manual upload triggered.");
-            EndSessionAndUpload();
-        }
+    { 
     }
 
 
@@ -199,7 +194,7 @@ public class SessionMetricsManager : MonoBehaviour
         float sessionTime = Time.time - sessionStartTime;
         float avgSpeed = returnCount > 0 ? sumSpeed / returnCount : 0f;
         float avgSpin = returnCount > 0 ? sumSpin / returnCount : 0f;
-        float distance = FindObjectOfType<BallDistanceProvider>()?.Distance ?? 0f;
+        float distance = FindFirstObjectByType<BallDistanceProvider>()?.Distance ?? 0f;
         int score = Mathf.Max(0, returnCount*100 - missCount*10);
 
         return new GameMetrics(

@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+
+/// <summary>
+/// Allows the user to teleport in the scene
+/// while using the controller
+/// </summary>
 public class TeleportationActivator : MonoBehaviour
 {
 

@@ -3,13 +3,37 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 
+/// <summary>
+/// Initializes Firebase services within the Unity application and provides
+/// global access to authentication and database instances.
+/// Ensures dependencies are resolved before Firebase is used.
+/// </summary>
 public class FirebaseInitializer : MonoBehaviour
 {
+    /// <summary>
+    /// Indicates whether Firebase has been successfully initialized and is ready for use.
+    /// </summary>
     public static bool IsReady { get; private set; }
+
+    /// <summary>
+    /// Provides access to the Firebase authentication instance.
+    /// </summary>
     public static FirebaseAuth Auth { get; private set; }
+
+    /// <summary>
+    /// Provides access to the Firebase Realtime Database instance.
+    /// </summary>
     public static FirebaseDatabase Database { get; private set; }
+
+    /// <summary>
+    /// Reference to the root of the Firebase Realtime Database.
+    /// </summary>
     public static DatabaseReference RootRef { get; private set; }
 
+    /// <summary>
+    /// Unity lifecycle method that initializes Firebase dependencies when the object awakens.
+    /// Ensures the object persists across scene loads and checks for required Firebase dependencies.
+    /// </summary>
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -17,17 +41,22 @@ public class FirebaseInitializer : MonoBehaviour
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             var status = task.Result;
+
+            // If dependencies are available, proceed with initialization
             if (status == DependencyStatus.Available)
             {
                 InitializeFirebase();
             }
             else
             {
-                Debug.LogError("Firebase dependencies could not be resolved: " + status);
             }
         });
     }
 
+    /// <summary>
+    /// Initializes Firebase services, including authentication and database access.
+    /// Sets up global references and marks the system as ready.
+    /// </summary>
     private void InitializeFirebase()
     {
         Auth = FirebaseAuth.DefaultInstance;
@@ -35,6 +64,5 @@ public class FirebaseInitializer : MonoBehaviour
         RootRef = Database.RootReference;
 
         IsReady = true;
-        Debug.Log("Firebase initialized successfully.");
     }
 }

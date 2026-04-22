@@ -672,7 +672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4140052019795306634, guid: cf72f26fed55a5d48861ea494fdf89b0, type: 3}
       propertyPath: m_Name
-      value: XR Origin (VR) (1) Variant
+      value: XR Origin (VR) (1) Variant_dst
       objectReference: {fileID: 0}
     - target: {fileID: 6135330581005092222, guid: cf72f26fed55a5d48861ea494fdf89b0, type: 3}
       propertyPath: m_LocalPosition.x

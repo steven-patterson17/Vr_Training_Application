@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Controls how the user is able to move around
+/// the unity scene
+/// </summary>
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 3f;
