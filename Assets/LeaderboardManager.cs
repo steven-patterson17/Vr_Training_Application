@@ -11,13 +11,13 @@ public class LeaderboardManager : MonoBehaviour
     public GameObject leaderboardPanel;          // UI panel to enable
     public TextMeshProUGUI[] leaderboardLines;   // size = 5
 
-    private DatabaseReference dbRef;
+    //private DatabaseReference dbRef;
     private string userUID;
 
-    void Awake()
-    {
-        dbRef = FirebaseDatabase.DefaultInstance.RootReference;
-    }
+    // void Awake()
+    // {
+    //     dbRef = FirebaseDatabase.DefaultInstance.RootReference;
+    // }
 
     // ⭐ NEW: Automatically load leaderboard when scene starts
     void Start()
