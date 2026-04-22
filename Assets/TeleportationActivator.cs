@@ -6,31 +6,34 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 /// Allows the user to teleport in the scene
 /// while using the controller
 /// </summary>
-public class TeleportationActivator : MonoBehaviour
+namespace VRTraining
 {
-
-    public XRRayInteractor teleportInteractor;
-    public InputActionProperty teleportActivatorAction;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class TeleportationActivator : MonoBehaviour
     {
-        teleportInteractor.gameObject.SetActive(false);
-
-        teleportActivatorAction.action.performed += Action_performed;
-    }
-
-    private void Action_performed(InputAction.CallbackContext obj)
-    {
-        teleportInteractor.gameObject.SetActive(true);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(teleportActivatorAction.action.WasReleasedThisFrame())
+    
+        public XRRayInteractor teleportInteractor;
+        public InputActionProperty teleportActivatorAction;
+    
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
         {
             teleportInteractor.gameObject.SetActive(false);
+    
+            teleportActivatorAction.action.performed += Action_performed;
+        }
+    
+        private void Action_performed(InputAction.CallbackContext obj)
+        {
+            teleportInteractor.gameObject.SetActive(true);
+        }
+    
+        // Update is called once per frame
+        void Update()
+        {
+            if(teleportActivatorAction.action.WasReleasedThisFrame())
+            {
+                teleportInteractor.gameObject.SetActive(false);
+            }
         }
     }
 }
