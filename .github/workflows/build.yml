@@ -1,22 +1,48 @@
-name: SonarQube
+name: SonarCloud Analysis
 
 on:
   push:
     branches:
       - main
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-  sonarcloud:
-    name: SonarCloud Analysis
-    runs-on: ubuntu-latest
+  sonar:
+    name: Analyze Unity Scripts
+    runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Install SonarScanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Add tools to PATH
+        shell: powershell
+        run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+
+      - name: SonarCloud Begin
+        shell: powershell
+        run: |
+          dotnet-sonarscanner begin `
+            /k:"steven-patterson17_Vr_Training_Application" `
+            /o:"steven-patterson17" `
+            /d:sonar.host.url="https://sonarcloud.io" `
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
+            /d:sonar.sources="Assets" `
+            /d:sonar.cs.skipCompilerCheck=true
+
+      - name: SonarCloud End
+        shell: powershell
+        run: |
+          dotnet-sonarscanner end `
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
