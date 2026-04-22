@@ -32,17 +32,21 @@ jobs:
 
       - name: SonarCloud Begin
         shell: powershell
+        env:
+          SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
         run: |
           dotnet-sonarscanner begin `
             /k:"steven-patterson17_Vr_Training_Application" `
             /o:"steven-patterson17" `
             /d:sonar.host.url="https://sonarcloud.io" `
-            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
+            /d:sonar.token="$SONAR_TOKEN" `
             /d:sonar.sources="Assets" `
             /d:sonar.cs.skipCompilerCheck=true
 
       - name: SonarCloud End
         shell: powershell
+        env:
+            SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
         run: |
           dotnet-sonarscanner end `
-            /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+            /d:sonar.token="$env:SONAR_TOKEN"
