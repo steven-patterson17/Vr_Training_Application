@@ -5,29 +5,32 @@ using Firebase.Database;
 /// Handles uploading player performance metrics to the Firebase Realtime Database.
 /// Ensures Firebase is initialized before attempting to send data.
 /// </summary>
-public class MetricsUploader : MonoBehaviour
+namespace VRTraining
 {
-    public void UploadReturnMetrics(string playerId, GameMetrics metrics)
+    public class MetricsUploader : MonoBehaviour
     {
-        if (!FirebaseInitializer.IsReady)
+        public void UploadReturnMetrics(string playerId, GameMetrics metrics)
         {
-            Debug.LogWarning("Firebase not ready — cannot upload metrics yet.");
-            return;
-        }
-        string json = JsonUtility.ToJson(metrics);
-
-        FirebaseInitializer.RootRef
-            .Child("players")
-            .Child(playerId)
-            .Child("sessions")
-            .Push()
-            .SetRawJsonValueAsync(json)
-            .ContinueWith(task =>
+            if (!FirebaseInitializer.IsReady)
             {
-                if (task.IsCompleted)
-                    Debug.Log("Metrics uploaded successfully.");
-                else
-                    Debug.LogError("Upload failed: " + task.Exception);
-            });
+                Debug.LogWarning("Firebase not ready — cannot upload metrics yet.");
+                return;
+            }
+            string json = JsonUtility.ToJson(metrics);
+    
+            FirebaseInitializer.RootRef
+                .Child("players")
+                .Child(playerId)
+                .Child("sessions")
+                .Push()
+                .SetRawJsonValueAsync(json)
+                .ContinueWith(task =>
+                {
+                    if (task.IsCompleted)
+                        Debug.Log("Metrics uploaded successfully.");
+                    else
+                        Debug.LogError("Upload failed: " + task.Exception);
+                });
+        }
     }
 }
