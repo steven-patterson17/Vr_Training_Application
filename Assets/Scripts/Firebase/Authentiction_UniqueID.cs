@@ -9,62 +9,58 @@ using System.Collections;
 public class AuthenticationManager : MonoBehaviour
 {
     /// <summary>
-    /// The Firebase authentication instance used to manage user sign-in and authentication state.
+    /// Backing field for Firebase authentication instance.
     /// </summary>
-    public static FirebaseAuth auth;
+    private static FirebaseAuth _auth;
 
     /// <summary>
-    /// The currently authenticated Firebase user.
+    /// Public read-only access to FirebaseAuth.
     /// </summary>
-    public static FirebaseUser user;
+    public static FirebaseAuth Auth => _auth;
+
+    /// <summary>
+    /// Backing field for the currently authenticated Firebase user.
+    /// </summary>
+    private static FirebaseUser _user;
+
+    /// <summary>
+    /// Public read-only access to the authenticated user.
+    /// </summary>
+    public static FirebaseUser User => _user;
 
     /// <summary>
     /// Unity coroutine that initializes Firebase authentication.
     /// Checks if a user is already signed in and, if not, performs anonymous sign-in.
     /// </summary>
-    /// <returns>
-    /// An IEnumerator used by Unity to handle asynchronous execution without blocking the main thread.
-    /// </returns>
     IEnumerator Start()
     {
-        // Let XR Interaction Toolkit + scene objects initialize first
+        // Allow XR and scene objects to initialize first
         yield return null;
 
-        /// <summary>
-        /// Initializes the default Firebase authentication instance.
-        /// </summary>
-        auth = FirebaseAuth.DefaultInstance;
+        // Initialize Firebase Auth
+        _auth = FirebaseAuth.DefaultInstance;
 
         // Already signed in?
-        user = auth.CurrentUser;
-
-        /// <summary>
-        /// If a user is already authenticated, reuse the existing session and skip sign-in.
-        /// </summary>
-        if (user != null)
+        _user = _auth.CurrentUser;
+        if (_user != null)
         {
             yield break;
         }
 
-        /// <summary>
-        /// Initiates anonymous sign-in using Firebase Authentication.
-        /// </summary>
-        var task = auth.SignInAnonymouslyAsync();
+        // Perform anonymous sign-in
+        var task = _auth.SignInAnonymouslyAsync();
 
-        // Wait for Firebase to finish without blocking the main thread
+        // Wait for Firebase to finish
         yield return new WaitUntil(() => task.IsCompleted);
 
-        /// <summary>
-        /// Handles the result of the authentication attempt.
-        /// On success, assigns the authenticated user.
-        /// On failure, logs an error message.
-        /// </summary>
+        // Assign user if successful
         if (task.Exception == null)
         {
-            user = task.Result.User;
+            _user = task.Result.User;
         }
         else
         {
+            Debug.LogError("Anonymous sign-in failed: " + task.Exception);
         }
     }
 }
