@@ -8,10 +8,9 @@ public class AnimateHandOnInput : MonoBehaviour
 
     public Animator handAnimator;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        // Intentionally left empty: this component requires no initialization.
     }
 
     // Update is called once per frame

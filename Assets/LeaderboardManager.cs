@@ -49,6 +49,8 @@ public class LeaderboardManager : MonoBehaviour
     {
         if (leaderboardPanel == null)
         {
+            Debug.LogError("Leaderboard panel missing!");
+            return;
         }
         else
         {
