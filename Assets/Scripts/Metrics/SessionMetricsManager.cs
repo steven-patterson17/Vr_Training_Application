@@ -1,4 +1,6 @@
+using Newtonsoft.Json.Bson;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -25,8 +27,18 @@ public class SessionMetricsManager : MonoBehaviour
     private int smashCount;
     private int sliceCount;
 
-    public static GameMode CurrentGameMode = GameMode.None;
-    public static bool IsLeftHanded = false;
+    public GameMode CurrentGameMode { get; private set; } = GameMode.None;
+    
+    public void SetGameMode(GameMode mode)
+    {
+        CurrentGameMode = mode;
+    }
+
+    public static bool IsLeftHanded { get; private set; }
+    public static void SetHandness(bool isLeft)
+    {
+        IsLeftHanded = isLeft;
+    }
 
     void Start()
     {
@@ -165,7 +177,7 @@ public class SessionMetricsManager : MonoBehaviour
         uploader.UploadReturnMetrics(metrics.playerId, metrics);
     }
 
-    public void SetLeftHanded(bool value) => IsLeftHanded = value;
+    public static void SetLeftHanded(bool value) => IsLeftHanded = value;
 
     /// <summary>
     /// Returns a snapshot of current metrics for UI display.
