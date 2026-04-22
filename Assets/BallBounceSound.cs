@@ -7,51 +7,54 @@ using UnityEngine;
 /// <summary>
 /// Controls which sound the ball gives off (hit or miss)
 /// </summary>
-public class BallBounceSound : MonoBehaviour
+namespace VRTraining
 {
-    /// <summary>
-    /// Audio clip played when the ball collides with surfaces such as the table, wall, or floor.
-    /// </summary>
-    public AudioClip bounceSound;
-
-    /// <summary>
-    /// Audio clip played when the ball collides with the paddle.
-    /// </summary>
-    public AudioClip hitSound;
-
-    /// <summary>
-    /// AudioSource component used to play sound effects.
-    /// </summary>
-    private AudioSource audioSource;
-
-    /// <summary>
-    /// Initializes the AudioSource component reference when the object starts.
-    /// </summary>
-    void Start()
+    public class BallBounceSound : MonoBehaviour
     {
-        audioSource = GetComponent<AudioSource>();
-    }
-
-    /// <summary>
-    /// Called when the ball collides with another object.
-    /// Plays different sounds depending on whether the collision
-    /// is with a paddle or another surface.
-    /// </summary>
-    /// <param name="collision">Collision data including contact and velocity information.</param>
-    void OnCollisionEnter(Collision collision)
-    {
-        // Ignore tiny collisions
-        if (collision.relativeVelocity.magnitude < 0.1f)
-            return;
-
-        // If the ball hit the paddle
-        if (collision.collider.CompareTag("Paddle"))
+        /// <summary>
+        /// Audio clip played when the ball collides with surfaces such as the table, wall, or floor.
+        /// </summary>
+        public AudioClip bounceSound;
+    
+        /// <summary>
+        /// Audio clip played when the ball collides with the paddle.
+        /// </summary>
+        public AudioClip hitSound;
+    
+        /// <summary>
+        /// AudioSource component used to play sound effects.
+        /// </summary>
+        private AudioSource audioSource;
+    
+        /// <summary>
+        /// Initializes the AudioSource component reference when the object starts.
+        /// </summary>
+        void Start()
         {
-            audioSource.PlayOneShot(hitSound);
+            audioSource = GetComponent<AudioSource>();
         }
-        else
+    
+        /// <summary>
+        /// Called when the ball collides with another object.
+        /// Plays different sounds depending on whether the collision
+        /// is with a paddle or another surface.
+        /// </summary>
+        /// <param name="collision">Collision data including contact and velocity information.</param>
+        void OnCollisionEnter(Collision collision)
         {
-            audioSource.PlayOneShot(bounceSound);
+            // Ignore tiny collisions
+            if (collision.relativeVelocity.magnitude < 0.1f)
+                return;
+    
+            // If the ball hit the paddle
+            if (collision.collider.CompareTag("Paddle"))
+            {
+                audioSource.PlayOneShot(hitSound);
+            }
+            else
+            {
+                audioSource.PlayOneShot(bounceSound);
+            }
         }
     }
 }
